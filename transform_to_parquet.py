@@ -1,7 +1,7 @@
 import os
 import polars as pl
 
-source_dir = "Data/CSV"
+source_dir = "Data/CSV/household_sensors"
 target_dir = "Data/Parquet"
 
 def remove_csv_extensions(filename):
@@ -26,11 +26,11 @@ for root, dirs, files in os.walk(source_dir):
             os.makedirs(os.path.dirname(final_target_path), exist_ok=True)
 
             try:
-                print(f"Próba konwersji: {source_file}")
+                # print(f"Próba konwersji: {source_file}")
                 df = pl.read_csv(source_file)
-                if df.is_empty():
-                    print(f"Pusty plik: {source_file}, pomijam.")
-                    continue
+                # if df.is_empty():
+                #     print(f"Pusty plik: {source_file}, pomijam.")
+                #     continue
                 df.write_parquet(final_target_path)
                 print(f"Zapisano: {final_target_path}")
             except Exception as e:
