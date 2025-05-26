@@ -24,10 +24,21 @@ def aggregate_data_daily(df: pl.DataFrame) -> pl.DataFrame:
         - 'daily_sum' : aggregated sum of 'value' per date (type: Int64 or Float64)
     """
 
+    # daily_agg = (
+    #     df.with_columns(pl.col("timestamp").dt.date().alias("date"))
+    #     .group_by("date")
+    #     .agg(pl.col("value").sum().alias("daily_sum"))
+    #     .sort("date")
+    # )
+
+        # Przelicznik: 1 sekunda × W / 3_600_000 = kWh
     daily_agg = (
-        df.with_columns(pl.col("timestamp").dt.date().alias("date"))
+        df.with_columns([
+            pl.col("timestamp").dt.date().alias("date"),
+            (pl.col("value") / 3_600_000).alias("energy_kWh")
+        ])
         .group_by("date")
-        .agg(pl.col("value").sum().alias("daily_sum"))
+        .agg(pl.col("energy_kWh").sum().alias("daily_kWh"))
         .sort("date")
     )
 
