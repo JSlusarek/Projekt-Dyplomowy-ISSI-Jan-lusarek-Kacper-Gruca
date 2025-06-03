@@ -43,17 +43,17 @@ class Appliance:
         """
         return round(self.energy_consumption() * emission_factor, 3)
 
-    def requires_supervision(self):
+    #def requires_supervision(self):
         """
-        Indicates whether the appliance requires user supervision during operation.
+    #    Indicates whether the appliance requires user supervision during operation.
         """
-        return False
+    #    return False To jest w sumie nie niepotrzebne, bo nie ma takich urządzeń
 
-    def priority(self):
+    #def priority(self):
         """
-        Priority level of the appliance in optimization systems (0–10).
+    #    Priority level of the appliance in optimization systems (0–10).
         """
-        return 5
+    #    return 5 To tez chyba
 
     def device_cost(self):
         """
@@ -72,8 +72,8 @@ class Appliance:
             "time_min": self.operation_time(),
             "comfort_penalty": self.comfort_penalty(),
             "co2_emission_kg": self.co2_emission(),
-            "requires_supervision": self.requires_supervision(),
-            "priority": self.priority(),
+            #"requires_supervision": self.requires_supervision(),
+            #"priority": self.priority(),
             "device_cost": self.device_cost(),
             "failure_rate": self.failure_rate()
         }
@@ -758,6 +758,9 @@ class Kitchen:
         # Override methods to simulate cooking instead of boiling
         induction.energy_consumption = lambda: 1.8 * (time_minutes / 60)
         gas.energy_consumption = lambda: (2.0 * (time_minutes / 60)) / 0.6
+        gas.operation_time= lambda: time_minutes
+        gas.cost = lambda: round(gas.energy_consumption() * 2.80 / 9.5, 2)  # m3 gas cost
+
 
         devices = [induction, gas]
         total_comfort = sum(dev.comfort_penalty() for dev in devices)
@@ -1009,4 +1012,5 @@ def find_optimal_device(df, weights):
         else:
             normalized = 0
         df["score"] += normalized * weight
+    df=df.drop(columns=['comfort_penalty', 'failure_rate'],axis=1)
     return df.sort_values(by="score", ascending=False).reset_index(drop=True)

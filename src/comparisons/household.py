@@ -62,6 +62,8 @@ class Kitchen:
         # Override methods to simulate cooking instead of boiling
         induction.energy_consumption = lambda: 1.8 * (time_minutes / 60)
         gas.energy_consumption = lambda: (2.0 * (time_minutes / 60)) / 0.6
+        gas.operation_time= lambda: time_minutes
+        gas.cost = lambda: round(gas.energy_consumption() * 2.80 / 9.5, 2)  # m3 gas cost
 
         devices = [induction, gas]
         total_comfort = sum(dev.comfort_penalty() for dev in devices)
