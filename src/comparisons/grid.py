@@ -29,7 +29,8 @@ def generate_weight_combinations(features, step=0.5):
         List of valid weight combinations (tuples of floats) that satisfy the constraint.
     """
 
-    possible_weights = np.arange(-1, 1 + step, step)
+    n_steps = int(2 / step) + 1  
+    possible_weights = np.linspace(-1, 1, n_steps)
     combinations = itertools.product(possible_weights, repeat=len(features))
     valid_combinations = [
         comb for comb in combinations if np.isclose(sum(abs(w) for w in comb), 1.0)
