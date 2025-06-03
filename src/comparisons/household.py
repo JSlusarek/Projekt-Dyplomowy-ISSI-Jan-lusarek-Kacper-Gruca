@@ -1,13 +1,17 @@
+# import sys
+# import os
+# sys.path.append(os.path.abspath(os.path.join("../../")))
+
 import pandas as pd
-from appliances.cooking import Kettle, InductionHob, GasHob
-from appliances.ovens import Microwave, ElectricOven, AirFryer, GasOven
-from appliances.coffee import ElectricMokaPot, CoffeeMachine
-from appliances.multicookers import ThermomixTM6, BoschCookit
-from appliances.heating import ElectricHeater, GasHeater, FlowHeater, HeatPump
-from appliances.bathing import Shower, Bathtub
-from appliances.bathroom_heating import LadderHeater, FloorHeating
-from appliances.workstations import DesktopComputer, LaptopWithMonitor
-from appliances.cooling import AirConditioner, Fan
+from src.appliances.cooking import Kettle, InductionHob, GasHob
+from src.appliances.ovens import Microwave, ElectricOven, AirFryer, GasOven
+from src.appliances.coffee import ElectricMokaPot, CoffeeMachine
+from src.appliances.multicookers import ThermomixTM6, BoschCookit
+from src.appliances.heating import ElectricHeater, GasHeater, FlowHeater, HeatPump
+from src.appliances.bathing import Shower, Bathtub
+from src.appliances.bathroom_heating import LadderHeater, FloorHeating
+from src.appliances.workstations import DesktopComputer, LaptopWithMonitor
+from src.appliances.cooling import AirConditioner, Fan
 
 
 class Kitchen:

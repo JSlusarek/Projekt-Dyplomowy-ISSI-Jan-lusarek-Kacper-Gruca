@@ -95,7 +95,7 @@ class FlowHeater(Appliance):
         return 0.4  # jak dla prądu w PL
 
     def cost_per_kwh_heat(self):
-        electricity_price = 1.0
+        electricity_price = 0.65
         return electricity_price / 1.0
 
     def summary(self):
@@ -131,7 +131,7 @@ class HeatPump(Appliance):
         return round(0.4 / self.cop, 3)  # redukcja śladu CO₂ dzięki COP
 
     def cost_per_kwh_heat(self):
-        electricity_price = 1.0
+        electricity_price = 0.65
         return electricity_price / self.cop
 
     def summary(self):
