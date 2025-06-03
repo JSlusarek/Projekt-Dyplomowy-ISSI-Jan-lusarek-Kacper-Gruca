@@ -26,4 +26,5 @@ def find_optimal_device(df, weights):
         else:
             normalized = 0
         df["score"] += normalized * weight
+    df=df.drop(columns=['comfort_penalty', 'failure_rate'],axis=1)
     return df.sort_values(by="score", ascending=False).reset_index(drop=True)

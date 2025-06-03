@@ -84,23 +84,7 @@ class Appliance(ABC):
             float: Estimated CO2 emissions in kilograms.
         """
         return round(self.energy_consumption() * emission_factor, 3)
-
-    def requires_supervision(self):
-        """
-        Indicates whether the appliance requires user presence during operation.
-
-        Returns:
-            bool: True if supervision is needed, False otherwise.
-        """
-        return False
-
-    def priority(self):
-        """
-        Returns:
-            int: Appliance priority level (0–10) for use in optimization or scheduling.
-        """
-        return 5
-
+    
     def summary(self):
         """
         Generate a summary of the appliance's key performance metrics.
@@ -115,8 +99,6 @@ class Appliance(ABC):
             "time_min": self.operation_time(),
             "comfort_penalty": self.comfort_penalty(),
             "co2_emission_kg": self.co2_emission(),
-            "requires_supervision": self.requires_supervision(),
-            "priority": self.priority(),
             "device_cost": self.device_cost(),
             "failure_rate": self.failure_rate()
         }
