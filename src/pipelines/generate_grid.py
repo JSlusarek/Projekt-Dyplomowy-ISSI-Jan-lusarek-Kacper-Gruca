@@ -66,8 +66,8 @@ def main():
     for name, df_varname, features in datasets:
         try:
             df = locals_dfs[df_varname]
-            print(f"🔍 Generowanie siatki wag dla: {name}...")
-            results = compute_all_combinations_parallel(df, features, step=1, n_jobs=-1)
+            print(f" Generowanie siatki wag dla: {name}...")
+            results = compute_all_combinations_parallel(df, features, step=0.1, n_jobs=-1)
             results.to_parquet(output_dir / f"{name}_grid.parquet", index=False)
             print(f"Zapisano: {name}_grid.parquet")
         except KeyError:
