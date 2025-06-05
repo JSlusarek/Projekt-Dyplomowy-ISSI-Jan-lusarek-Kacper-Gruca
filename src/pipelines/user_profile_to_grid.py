@@ -171,7 +171,7 @@ def main():
     print("Finalizing DataFrame......")
     df_final = df_final.drop(["abs_weights_list_clean", "is_balanced", "max_quality_value", "abs_device_cost", "max_abs_weight"])
     print("Final DataFrame ready!")
-    df_final.write_parquet(folder / "grid_user_profile.parquet")
+    df_final.write_parquet(folder / "grid_with_profiles.parquet")
     print(f'************Correctly saved file grid_user_profile.parquet to: {folder}***************')
 
 
