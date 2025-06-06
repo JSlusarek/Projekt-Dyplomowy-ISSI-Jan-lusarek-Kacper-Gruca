@@ -1,0 +1,111 @@
+/* === GLOBAL === */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+body {
+    background-color: #f0fdfa; /* Lekko zielonkawe, świeże tło */
+    color: #1d1d1f;
+    font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+/* === LINKS === */
+a {
+    color: #0a84ff;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+a:hover {
+    color: #34c759;
+    text-decoration: underline;
+}
+
+/* === BUTTONS === */
+a > .mantine-Button-root {
+    background: linear-gradient(135deg, #34c759, #0a84ff);
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: none;
+}
+
+a > .mantine-Button-root:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* === CONTAINERS === */
+.mantine-Container-root {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+}
+
+/* === STEPS NAVBAR === */
+#steps-navbar {
+    padding-top: 24px;
+    padding-bottom: 24px;
+    background-color: #f0fdfa; /* pastelowy akcent nawigacyjny */
+    /*border-bottom: 1px solid #c2e3dd;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.03);
+}
+
+/* === PAGE CONTAINER === */
+._dash-pages-container {
+    padding: 20px 0 60px 0;
+    transition: all 0.3s ease;
+}
+
+/* === MODERN CARD SHADOW === */
+.card-shadow {
+    background-color: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    border: 1px solid #e0f4f1;
+}
+
+.card-shadow:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+
+/* === TOOLTIP STYLE === */
+.tooltip {
+    position: relative;
+    cursor: pointer;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1d1d1f;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+}
+
+/* === FADE IN === */
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
