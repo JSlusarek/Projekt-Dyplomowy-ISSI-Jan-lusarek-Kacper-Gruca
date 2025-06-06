@@ -1,0 +1,8 @@
+{
+  "cost_pln": 1,
+  "co2_emission_kg": 5,
+  "normalized_comfort": 8,
+  "normalized_failure_rate": 2,
+  "device_cost": -5,
+  "cooking_quality": 9
+}
