@@ -4,17 +4,6 @@ import google.generativeai as genai
 from pathlib import Path
 
 
-
-from pathlib import Path
-from dotenv import load_dotenv
-import os
-
-
-from dotenv import load_dotenv
-import os
-from pathlib import Path
-
-
 def load_api_key(env_var_name: str = "GOOGLE_API_KEY") -> str:
     # ŚCIEŻKA BEZWZGLĘDNA – DOPASUJ DO SWOJEGO SYSTEMU
     env_path = Path(r"C:\Users\jansl\OneDrive - uek.krakow.pl\Pulpit\ISSI\Projekt_dyplomowy\src\ai_answer_engine\.env")
