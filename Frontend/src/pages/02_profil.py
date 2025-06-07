@@ -19,8 +19,10 @@ from src.ai_answer_engine.gemini_model_answer import (
     interpret_prediction_with_gemini
 )
 
-
-configure_gemini_client(load_api_key())
+try:
+    configure_gemini_client(load_api_key())
+except:
+    print("Załadowanie API KEY do Gemini nie powiodło się")
 
 
 dash.register_page(__name__, path_template="/profil", name="Profil")
