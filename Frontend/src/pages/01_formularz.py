@@ -16,7 +16,8 @@ def layout(**kwargs):
     return html.Div([
 
         #dcc.Location(id="url", refresh=False),
-
+        dcc.Location(id="redirect", refresh=True),
+        dcc.Store(id="user-input-store", storage_type="session"),
         dmc.Container([
             dmc.Title("Zmienne", order=1, ta="center"),
 
@@ -272,3 +273,42 @@ def go_to_step2(n_clicks, progress):
 #         user_input["cooling_quality"] = cooling
 
 #     return str(user_input)  # debug; tu można np. wysłać do API, itp.
+
+@callback(
+    Output("user-input-store", "data"),
+    Output("redirect", "pathname"),
+    Input("submit-button", "n_clicks"),
+    State("cost_pln", "value"),
+    State("co2_emission_kg", "value"),
+    State("normalized_comfort", "value"),
+    State("normalized_failure_rate", "value"),
+    State("device_cost", "value"),
+    State("heating_quality_enabled", "checked"),
+    State("heating_quality", "value"),
+    State("cooking_quality_enabled", "checked"),
+    State("cooking_quality", "value"),
+    State("computing_quality_enabled", "checked"),
+    State("computing_quality", "value"),
+    State("cooling_quality_enabled", "checked"),
+    State("cooling_quality", "value"),
+    prevent_initial_call=True
+)
+def collect_user_input(_, cost, co2, comfort, failure, device,
+                       heating_enabled, heating,
+                       cooking_enabled, cooking,
+                       computing_enabled, computing,
+                       cooling_enabled, cooling):
+    user_input = {
+        "cost_pln": cost,
+        "co2_emission_kg": co2,
+        "normalized_comfort": comfort,
+        "normalized_failure_rate": failure,
+        "device_cost": device,
+        "heating_quality": heating if heating_enabled else 0,
+        "cooking_quality": cooking if cooking_enabled else 0,
+        "computing_quality": computing if computing_enabled else 0,
+        "cooling_quality": cooling if cooling_enabled else 0,
+    }
+
+    print("Zbierane dane od użytkownika:", user_input)
+    return user_input, "/profil"
