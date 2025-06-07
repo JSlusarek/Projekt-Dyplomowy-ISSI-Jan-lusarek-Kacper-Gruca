@@ -51,7 +51,7 @@ def layout(**kwargs):
 
             dcc.Store(id="user-profiles-store"),
             dcc.Store(id="profiler-ran-flag", data=False),
-            dcc.Store(id="user-profile-selection"),
+            dcc.Store(id="user-profile-selection",storage_type='session'),
 
             dmc.Space(h=20),
 
