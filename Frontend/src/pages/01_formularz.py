@@ -18,10 +18,10 @@ def layout(**kwargs):
         #dcc.Location(id="url", refresh=False),
 
         dmc.Container([
-            dmc.Title("Zmienne", order=1, ta="center"),
+            dmc.Title("Co jest dla Ciebie ważne?", order=1, ta="center"),
 
             dmc.Text(
-                "Wybierz jak bardzo zależy Ci na wymienionych cechach",
+                "Ustaw suwaki, aby wskazać, na których cechach najbardziej Ci zależy. Im wyższa wartość, tym większe znaczenie tej cechy w wyborze urządzenia.",
                 size="md",
                 ta="center",
                 mt="lg",
@@ -30,7 +30,7 @@ def layout(**kwargs):
 
             # ------------------ Obowiązkowe cechy ------------------
             dbc.Row([
-                dbc.Col(dmc.Text("Koszt zużycia energii"), width=3),
+                dbc.Col(dmc.Text("Obniżenie kosztu energii"), width=3),
                 dbc.Col(html.Div(), width=1),
                 dbc.Col(dmc.Slider(
                     id="cost_pln",
@@ -46,7 +46,7 @@ def layout(**kwargs):
             ], align="center", className="mb-3"),
 
             dbc.Row([
-                dbc.Col(dmc.Text("Zużycie dwutlenku węgla"), width=3),
+                dbc.Col(dmc.Text("Redukcja emisji CO2"), width=3),
                 dbc.Col(html.Div(), width=1),
                 dbc.Col(dmc.Slider(
                     id="co2_emission_kg",
@@ -62,7 +62,7 @@ def layout(**kwargs):
             ], align="center", className="mb-3"),
 
             dbc.Row([
-                dbc.Col(dmc.Text("Komfort użytkowania"), width=3),
+                dbc.Col(dmc.Text("Oczekiwany komfort użytkowania"), width=3),
                 dbc.Col(html.Div(), width=1),
                 dbc.Col(dmc.Slider(
                     id="normalized_comfort",
@@ -78,7 +78,7 @@ def layout(**kwargs):
             ], align="center", className="mb-3"),
 
             dbc.Row([
-                dbc.Col(dmc.Text("Niska awaryjność"), width=3),
+                dbc.Col(dmc.Text("Oczekiwana niezawodność"), width=3),
                 dbc.Col(html.Div(), width=1),
                 dbc.Col(dmc.Slider(
                     id="normalized_failure_rate",
@@ -94,7 +94,7 @@ def layout(**kwargs):
             ], align="center", className="mb-3"),
 
             dbc.Row([
-                dbc.Col(dmc.Text("Koszt urządzenia"), width=3),
+                dbc.Col(dmc.Text("Obnienie ceny urządzenia"), width=3),
                 dbc.Col(html.Div(), width=1),
                 dbc.Col(dmc.Slider(
                     id="device_cost",
@@ -114,7 +114,7 @@ def layout(**kwargs):
             # ------------------ Opcjonalne cechy ------------------
 
             dbc.Row([
-                dbc.Col(dmc.Text("Jakość grzania"), width=3),
+                dbc.Col(dmc.Text("Jakość grzania (kuchenka)"), width=3),
                 dbc.Col(dmc.Center(dmc.Switch(id="heating_quality_enabled", checked=False, size="sm")), width=1),
                 dbc.Col(dmc.Slider(
                     id="heating_quality",
@@ -165,7 +165,7 @@ def layout(**kwargs):
             ], align="center", className="mb-3"),
 
             dbc.Row([
-                dbc.Col(dmc.Text("Jakość chłodzenia"), width=3),
+                dbc.Col(dmc.Text("Jakość chłodzenia (klimatyzacja)"), width=3),
                 dbc.Col(dmc.Center(dmc.Switch(id="cooling_quality_enabled", checked=False, size="sm")), width=1),
                 dbc.Col(dmc.Slider(
                     id="cooling_quality",
