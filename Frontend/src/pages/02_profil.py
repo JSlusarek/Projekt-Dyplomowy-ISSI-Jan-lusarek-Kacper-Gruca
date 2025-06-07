@@ -19,8 +19,10 @@ from src.ai_answer_engine.gemini_model_answer import (
     interpret_prediction_with_gemini
 )
 
-
-configure_gemini_client(load_api_key())
+try:
+    configure_gemini_client(load_api_key())
+except:
+    print("Załadowanie API KEY do Gemini nie powiodło się")
 
 
 dash.register_page(__name__, path_template="/profil", name="Profil")
@@ -69,25 +71,6 @@ def layout(**kwargs):
                             children=[
                                 dmc.Center([
                                     #dbc.Button("Akceptuj rekomendowany profil", id="accept-main-profile", color="teal" ,className="me-2",style={"borderRadius": "12px"}),
-                                    dbc.Button(
-                                        "Akceptuj rekomendowany profil",
-                                        id="accept-main-profile",
-                                        color="teal",  # wymagany, ale i tak go nadpisujemy stylem
-                                        className="me-2",
-                                        style={
-                                            "background": "linear-gradient(90deg, #00c96b, #007bff)",  # gradient z zieleni do niebieskiego
-                                            "border": "none",               # bez ramki
-                                            "color": "white",               # biały tekst
-                                            "fontWeight": "bold",           # pogrubienie
-                                            "padding": "10px 24px",         # wewnętrzne marginesy
-                                            "borderRadius": "12px",         # zaokrąglenie rogów
-                                            "fontSize": "16px",             # rozmiar czcionki
-                                            "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",  # lekki cień
-                                            "textAlign": "center",          # wyśrodkowanie tekstu
-                                            "whiteSpace": "nowrap",         # zapobiega łamaniu się tekstu
-                                            "transition": "0.3s",           # płynne efekty hovera
-                                        }
-                                    ),
 
                                     #dbc.Button("Wolę alternatywny profil", id="accept-alternative-profile", color="warning"),
                                     dbc.Button(
@@ -108,8 +91,27 @@ def layout(**kwargs):
                                             "whiteSpace": "nowrap",
                                             "transition": "0.3s",
                                         }
+                                    ),
+                                    
+                                    dbc.Button(
+                                        "Wybierz rekomendowany profil",
+                                        id="accept-main-profile",
+                                        color="teal",  # wymagany, ale i tak go nadpisujemy stylem
+                                        className="me-2",
+                                        style={
+                                            "background": "linear-gradient(90deg, #00c96b, #007bff)",  # gradient z zieleni do niebieskiego
+                                            "border": "none",               # bez ramki
+                                            "color": "white",               # biały tekst
+                                            "fontWeight": "bold",           # pogrubienie
+                                            "padding": "10px 24px",         # wewnętrzne marginesy
+                                            "borderRadius": "12px",         # zaokrąglenie rogów
+                                            "fontSize": "16px",             # rozmiar czcionki
+                                            "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",  # lekki cień
+                                            "textAlign": "center",          # wyśrodkowanie tekstu
+                                            "whiteSpace": "nowrap",         # zapobiega łamaniu się tekstu
+                                            "transition": "0.3s",           # płynne efekty hovera
+                                        }
                                     )
-
                                 ]),
                                 dmc.Space(h=20),
                                 dmc.Center(
@@ -120,7 +122,7 @@ def layout(**kwargs):
                                     style={"marginBottom": "10px"}
                                 ),
                                 dmc.Center(
-                                    dbc.Button("Akceptuj", id="go-to-summary", color="teal",n_clicks=0,disabled=True,
+                                    dbc.Button("Przejdź dalej", id="go-to-summary", color="teal",n_clicks=0,disabled=True,
                                     style={
                                     "backgroundColor": "#00c96b",         # ten sam odcień zieleni
                                     "border": "none",

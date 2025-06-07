@@ -5,8 +5,8 @@ from pathlib import Path
 
 def load_api_key(env_var_name: str = "GOOGLE_API_KEY") -> str:
     # ŚCIEŻKA BEZWZGLĘDNA – DOPASUJ DO SWOJEGO SYSTEMU
-    env_path = Path(r"C:\Users\jansl\OneDrive - uek.krakow.pl\Pulpit\ISSI\Projekt_dyplomowy\src\ai_answer_engine\.env")
-    #env_path = Path(r"/Volumes/T7/Projekty/Projekt-Dyplomowy-ISSI-Jan-lusarek-Kacper-Gruca/src/ai_answer_engine/gemini_model_answer.env")
+    #env_path = Path(r"C:\Users\jansl\OneDrive - uek.krakow.pl\Pulpit\ISSI\Projekt_dyplomowy\src\ai_answer_engine\.env")
+    env_path = Path(r"/Volumes/T7/Projekty/Projekt-Dyplomowy-ISSI-Jan-lusarek-Kacper-Gruca/src/ai_answer_engine/.env")
 
     print(f"Ładuję .env z: {env_path}")  # debug
     load_dotenv(dotenv_path=env_path)
