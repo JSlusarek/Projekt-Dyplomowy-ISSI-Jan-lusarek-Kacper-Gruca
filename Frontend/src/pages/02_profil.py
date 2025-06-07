@@ -9,6 +9,8 @@ import dash
 from dash import html, dcc, Input, Output, State, callback, ctx
 import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
+from dash.exceptions import PreventUpdate
+
 
 from src.recommendation_engine.predict_profile_for_user import predict_profile_for_user
 from src.ai_answer_engine.gemini_model_answer import (
@@ -36,11 +38,14 @@ def layout(**kwargs):
 
         dbc.Container([
             dmc.Title("Profil użytkownika", order=1, ta="center"),
+            dcc.Location(id="redirect", refresh=True),
+            dcc.Store(id="user-input-store", storage_type="session"),
+
          
 
-            dmc.Center(
-                dbc.Button("Uruchom profiler", id="run-interpretation-btn", n_clicks=0)
-            ),
+            #dmc.Center(
+            #    dbc.Button("Uruchom profiler", id="run-interpretation-btn", n_clicks=0)
+            #),
 
             dcc.Store(id="user-profiles-store"),
             dcc.Store(id="profiler-ran-flag", data=False),
@@ -63,16 +68,72 @@ def layout(**kwargs):
                             id="profile-choice-buttons",
                             children=[
                                 dmc.Center([
-                                    dbc.Button("Akceptuj rekomendowany profil", id="accept-main-profile", color="success", className="me-2"),
-                                    dbc.Button("Wolę alternatywny profil", id="accept-alternative-profile", color="warning"),
+                                    #dbc.Button("Akceptuj rekomendowany profil", id="accept-main-profile", color="teal" ,className="me-2",style={"borderRadius": "12px"}),
+                                    dbc.Button(
+                                        "Akceptuj rekomendowany profil",
+                                        id="accept-main-profile",
+                                        color="teal",  # wymagany, ale i tak go nadpisujemy stylem
+                                        className="me-2",
+                                        style={
+                                            "background": "linear-gradient(90deg, #00c96b, #007bff)",  # gradient z zieleni do niebieskiego
+                                            "border": "none",               # bez ramki
+                                            "color": "white",               # biały tekst
+                                            "fontWeight": "bold",           # pogrubienie
+                                            "padding": "10px 24px",         # wewnętrzne marginesy
+                                            "borderRadius": "12px",         # zaokrąglenie rogów
+                                            "fontSize": "16px",             # rozmiar czcionki
+                                            "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",  # lekki cień
+                                            "textAlign": "center",          # wyśrodkowanie tekstu
+                                            "whiteSpace": "nowrap",         # zapobiega łamaniu się tekstu
+                                            "transition": "0.3s",           # płynne efekty hovera
+                                        }
+                                    ),
+
+                                    #dbc.Button("Wolę alternatywny profil", id="accept-alternative-profile", color="warning"),
+                                    dbc.Button(
+                                        "Wolę alternatywny profil",
+                                        id="accept-alternative-profile",
+                                        color="warning",  # zachowana funkcjonalność Dash
+                                        className="me-2",
+                                        style={
+                                            "background": "linear-gradient(90deg, #f9d423, #ff4e00)",  # złoto → pomarańcz
+                                            "border": "none",
+                                            "color": "white",
+                                            "fontWeight": "bold",
+                                            "padding": "10px 24px",
+                                            "borderRadius": "12px",
+                                            "fontSize": "16px",
+                                            "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+                                            "textAlign": "center",
+                                            "whiteSpace": "nowrap",
+                                            "transition": "0.3s",
+                                        }
+                                    )
+
                                 ]),
                                 dmc.Space(h=20),
                                 dmc.Center(
                                     dmc.Text(id="confirmation-output", size="lg", fw="500", c="green")
                                 ),
                                 dmc.Center(
-                                    dbc.Button("Przejdź dalej", id="go-to-summary", color="teal", n_clicks=0),
-                                    style={"marginTop": "20px"}
+                                    dmc.Text(id="profile-warning", size="md", c="red"),
+                                    style={"marginBottom": "10px"}
+                                ),
+                                dmc.Center(
+                                    dbc.Button("Akceptuj", id="go-to-summary", color="teal",n_clicks=0,disabled=True,
+                                    style={
+                                    "backgroundColor": "#00c96b",         # ten sam odcień zieleni
+                                    "border": "none",
+                                    "color": "white",
+                                    "fontWeight": "bold",
+                                    "padding": "10px 24px",
+                                    "borderRadius": "8px",               # lekko zaokrąglone rogi
+                                    "fontSize": "16px",
+                                    "boxShadow": "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                    "textAlign": "center",
+                                    "whiteSpace": "nowrap",
+                                    "transition": "0.3s",
+                                })
                                 )
                             ],
                             style={"display": "none"}
@@ -83,26 +144,23 @@ def layout(**kwargs):
             ),
            dmc.Paper([
                 dcc.Markdown(legend_markdown, style={"whiteSpace": "pre-wrap"})
-            ], withBorder=True, shadow="xs", p="md", mt=30),
-            dmc.Text(
-                "Wkliknij na poniższy przycisk by przypisać swój profil użytkownika.",
-                ta="center", mb="md"
-            )], style={"marginTop": "30px", "maxWidth": "1200px"})
+            ], withBorder=True, shadow="xs", p="md", mt=30)], style={"marginTop": "30px", "maxWidth": "1200px"})
     ])
-
 @callback(
     Output("interpretation-output", "children"),
     Output("user-profiles-store", "data"),
     Output("profiler-ran-flag", "data"),
-    Input("run-interpretation-btn", "n_clicks"),
+    Input("user-input-store", "data"),
     prevent_initial_call=True
 )
-def run_interpretation(n_clicks):
+def run_interpretation(user_input):
+    if not user_input:
+        raise PreventUpdate
+
     try:
         with open("../../models/feature_order_user_profile_model.pkl", "rb") as f:
             feature_order = pickle.load(f)
-        with open("user_input.json", "r") as f:
-            user_input = json.load(f)
+
         with open("../../models/user_profile_model.pkl", "rb") as f:
             model = pickle.load(f)
 
@@ -111,8 +169,16 @@ def run_interpretation(n_clicks):
             model=model,
             feature_order=feature_order,
         )
-        
-        interpretation = interpret_prediction_with_gemini(user_input, predicted_profiles=profiles)
+
+        recommendation = (
+            f"**Rekomendowany profil:** `{profiles[0]}`  \n"
+            f"**Alternatywny profil:** `{profiles[1]}`  \n\n"
+        )
+
+        interpretation = recommendation + interpret_prediction_with_gemini(
+            user_input,
+            predicted_profiles=profiles
+        )
 
         return interpretation, {
             "user_input": user_input,
@@ -121,7 +187,14 @@ def run_interpretation(n_clicks):
         }, True
 
     except Exception as e:
-        return f"Błąd podczas generowania interpretacji: {str(e)}", dash.no_update, False
+        # fallback: same profile, bez AI
+        interpretation = (
+            f"**Rekomendowany profil:** `Brak danych`  \n"
+            f"**Alternatywny profil:** `Brak danych`  \n\n"
+            f"Upss, nie mogliśmy się połączyć z AI"
+        )
+        return interpretation, dash.no_update, False
+
 
 @callback(
     Output("profile-choice-buttons", "style"),
@@ -172,16 +245,31 @@ def check_access(progress):
 @callback(
     Output("wizard-progress", "data", allow_duplicate=True),
     Output("redirect-check", "pathname", allow_duplicate=True),
+    Output("profile-warning", "children"),  # nowy output!
     Input("go-to-summary", "n_clicks"),
     State("wizard-progress", "data"),
+    State("user-profile-selection", "data"),
     prevent_initial_call=True
 )
-
-def go_to_summary(n, progress):
+def go_to_summary(n, progress, profile_selected):
     if not n:
         raise dash.exceptions.PreventUpdate
-    
+
+    if not profile_selected:
+        return dash.no_update, dash.no_update, "⚠️ Proszę wybrać profil przed kontynuacją."
+
     if progress is None:
         progress = {}
+
     progress["step_2_done"] = True
-    return progress, "/zestawienie"
+    return progress, "/zestawienie", ""
+
+
+
+
+@callback(
+    Output("go-to-summary", "disabled"),
+    Input("user-profile-selection", "data")
+)
+def enable_summary_button(profile):
+    return not bool(profile)  # przycisk aktywny tylko jeśli coś wybrano
