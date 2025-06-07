@@ -29,6 +29,11 @@ with open("assets/profil_legend.md", "r", encoding="utf-8") as f:
 
 def layout(**kwargs):
     return html.Div([
+
+        dcc.Location(id="redirect-check", refresh=True),
+        dcc.Store(id="wizard-progress"),
+        html.Div(id="redirect-dummy"),                  # redirect if necessary
+
         dbc.Container([
             dmc.Title("Profil użytkownika", order=1, ta="center"),
          
@@ -64,6 +69,10 @@ def layout(**kwargs):
                                 dmc.Space(h=20),
                                 dmc.Center(
                                     dmc.Text(id="confirmation-output", size="lg", fw="500", c="green")
+                                ),
+                                dmc.Center(
+                                    dbc.Button("Przejdź dalej", id="go-to-summary", color="teal", n_clicks=0),
+                                    style={"marginTop": "20px"}
                                 )
                             ],
                             style={"display": "none"}
@@ -147,3 +156,32 @@ def handle_user_selection(n_main, n_alt, profiles_data):
         return profiles_data["profile_second"], f" Wybrałeś alternatywny profil: **{profiles_data['profile_second']}**"
 
     return dash.no_update, ""
+
+@callback(
+    Output("redirect-check", "pathname"),
+    Input("wizard-progress", "data"),
+    prevent_initial_call=True
+)
+
+def check_access(progress):
+    if not progress.get("step_1_done"):
+        return "/formularz"
+    raise dash.exceptions.PreventUpdate
+
+
+@callback(
+    Output("wizard-progress", "data", allow_duplicate=True),
+    Output("redirect-check", "pathname", allow_duplicate=True),
+    Input("go-to-summary", "n_clicks"),
+    State("wizard-progress", "data"),
+    prevent_initial_call=True
+)
+
+def go_to_summary(n, progress):
+    if not n:
+        raise dash.exceptions.PreventUpdate
+    
+    if progress is None:
+        progress = {}
+    progress["step_2_done"] = True
+    return progress, "/zestawienie"

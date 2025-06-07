@@ -6,12 +6,17 @@ import dash
 from dash import html
 import dash_mantine_components as dmc
 import dash_bootstrap_components as dbc
-from dash import Input, Output, callback, State, ctx
+from dash import Input, Output, callback, State, ctx, dcc, no_update
+from dash.exceptions import PreventUpdate
+
 
 dash.register_page(__name__, path_template="/formularz", name="Formularz")
 
 def layout(**kwargs):
     return html.Div([
+
+        #dcc.Location(id="url", refresh=False),
+
         dmc.Container([
             dmc.Title("Zmienne", order=1, ta="center"),
 
@@ -203,51 +208,67 @@ def toggle_comp(e): return not e
 @callback(Output("cooling_quality", "disabled"), Input("cooling_quality_enabled", "checked"))
 def toggle_cool(e): return not e
 
-# wysyłanie na BE
 
+# # move to the next step and update progress
 @callback(
-    Output("output-id", "children"),        # ???
-    Input("submit-button", "n_clicks"),     # ???
-    State("cost_pln", "value"),
-    State("co2_emission_kg", "value"),
-    State("normalized_comfort", "value"),
-    State("normalized_failure_rate", "value"),
-    State("device_cost", "value"),
-
-    State("heating_quality_enabled", "checked"),
-    State("heating_quality", "value"),
-
-    State("cooking_quality_enabled", "checked"),
-    State("cooking_quality", "value"),
-
-    State("computing_quality_enabled", "checked"),
-    State("computing_quality", "value"),
-
-    State("cooling_quality_enabled", "checked"),
-    State("cooling_quality", "value"),
+    Output("wizard-progress", "data", allow_duplicate=True),
+    Output("steps-navbar", "children", allow_duplicate=True),  # wymuszamy refresh navbaru
+    Input("submit-button", "n_clicks"),
+    State("wizard-progress", "data"),
+    prevent_initial_call=True
 )
+def go_to_step2(n_clicks, progress):
+    if not n_clicks:
+        raise PreventUpdate
 
-def collect_user_input(_, cost, co2, comfort, failure, device,
-                       heating_enabled, heating,
-                       cooking_enabled, cooking,
-                       computing_enabled, computing,
-                       cooling_enabled, cooling):
+    progress["step_1_done"] = True
+    return progress, no_update
 
-    user_input = {
-        "cost_pln": cost,
-        "co2_emission_kg": co2,
-        "normalized_comfort": comfort,
-        "normalized_failure_rate": failure,
-        "device_cost": device,
-    }
+# # wysyłanie na BE
 
-    if heating_enabled:
-        user_input["heating_quality"] = heating
-    if cooking_enabled:
-        user_input["cooking_quality"] = cooking
-    if computing_enabled:
-        user_input["computing_quality"] = computing
-    if cooling_enabled:
-        user_input["cooling_quality"] = cooling
+# @callback(
+#     Output("output-id", "children"),        # ???
+#     Input("submit-button", "n_clicks"),     # ???
+#     State("cost_pln", "value"),
+#     State("co2_emission_kg", "value"),
+#     State("normalized_comfort", "value"),
+#     State("normalized_failure_rate", "value"),
+#     State("device_cost", "value"),
 
-    return str(user_input)  # debug; tu można np. wysłać do API, itp.
+#     State("heating_quality_enabled", "checked"),
+#     State("heating_quality", "value"),
+
+#     State("cooking_quality_enabled", "checked"),
+#     State("cooking_quality", "value"),
+
+#     State("computing_quality_enabled", "checked"),
+#     State("computing_quality", "value"),
+
+#     State("cooling_quality_enabled", "checked"),
+#     State("cooling_quality", "value"),
+# )
+
+# def collect_user_input(_, cost, co2, comfort, failure, device,
+#                        heating_enabled, heating,
+#                        cooking_enabled, cooking,
+#                        computing_enabled, computing,
+#                        cooling_enabled, cooling):
+
+#     user_input = {
+#         "cost_pln": cost,
+#         "co2_emission_kg": co2,
+#         "normalized_comfort": comfort,
+#         "normalized_failure_rate": failure,
+#         "device_cost": device,
+#     }
+
+#     if heating_enabled:
+#         user_input["heating_quality"] = heating
+#     if cooking_enabled:
+#         user_input["cooking_quality"] = cooking
+#     if computing_enabled:
+#         user_input["computing_quality"] = computing
+#     if cooling_enabled:
+#         user_input["cooling_quality"] = cooling
+
+#     return str(user_input)  # debug; tu można np. wysłać do API, itp.
