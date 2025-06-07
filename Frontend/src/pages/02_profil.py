@@ -221,13 +221,13 @@ def handle_user_selection(n_main, n_alt, profiles_data):
         return dash.no_update, "Najpierw uruchom profiler."
 
     if triggered == "accept-main-profile":
-        with open("profil.json", "w", encoding="utf-8") as f:
-            json.dump(profiles_data["profile_first"], f)
+        #with open("profil.json", "w", encoding="utf-8") as f:
+            #json.dump(profiles_data["profile_first"], f)
         return profiles_data["profile_first"], f"Wybrałeś profil: **{profiles_data['profile_first']}**"
 
     elif triggered == "accept-alternative-profile":
-        with open("profil.json", "w", encoding="utf-8") as f:
-            json.dump(profiles_data["profile_second"], f)
+        #with open("profil.json", "w", encoding="utf-8") as f:
+            #json.dump(profiles_data["profile_second"], f)
         return profiles_data["profile_second"], f" Wybrałeś alternatywny profil: **{profiles_data['profile_second']}**"
 
     return dash.no_update, ""
